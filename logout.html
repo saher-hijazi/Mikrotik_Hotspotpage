@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="expires" content="-1">
+    <title>Internet Hotspot - Log out</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(45deg, #4A90E2, #50C7D7);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            overflow: hidden;
+        }
+
+        .main {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 30px 40px;
+            border-radius: 20px;
+            width: 400px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .main:hover {
+            transform: scale(1.05);
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+            color: #FFD700;
+        }
+
+        table {
+            width: 100%;
+            margin-bottom: 20px;
+            font-size: 16px;
+            color: #ddd;
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        table td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table tr:last-child td {
+            border-bottom: none;
+        }
+
+        table tr:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        input[type="submit"] {
+            width: 100%;
+            padding: 15px;
+            background: #50C7D7;
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background: #4A90E2;
+        }
+
+        .info {
+            font-size: 14px;
+            color: #bbb;
+            margin-top: 10px;
+            transition: color 0.3s ease;
+        }
+
+        .info:hover {
+            color: #fff;
+        }
+
+        .footer {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #ccc;
+        }
+
+        .footer p {
+            text-align: center;
+        }
+
+    </style>
+    <script>
+        function openLogin() {
+            if (window.name != 'hotspot_logout') return true;
+            open('$(link-login)', '_blank', '');
+            window.close();
+            return false;
+        }
+    </script>
+</head>
+
+<body>
+    <div class="main">
+        <h1>You have just logged out!</h1>
+        <table>
+            <tr><td>Username</td><td>$(username)</td></tr>
+            <tr><td>IP address</td><td>$(ip)</td></tr>
+            <tr><td>MAC address</td><td>$(mac)</td></tr>
+            <tr><td>Session time</td><td>$(uptime)</td></tr>
+            $(if session-time-left)
+            <tr><td>Time left</td><td>$(session-time-left)</td></tr>
+            $(endif)
+            <tr><td>Bytes up / down:</td><td>$(bytes-in-nice) / $(bytes-out-nice)</td></tr>
+        </table>
+
+        <form action="$(link-login)" name="login" onSubmit="return openLogin()">
+            <input id="log-in" type="submit" value="Log in">
+        </form>
+        <div class="info">
+            <p>If you wish to log in again, click the button above.</p>
+        </div>
+    </div>
+    <div class="footer">
+        <p>&copy;2025 Eng. Ahmed Al-Nahal. All rights reserved.</p>
+    </div>
+</body>
+
+</html>

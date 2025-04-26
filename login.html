@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Premium WiFi connection portal - Silver Hotspot">
+    <meta name="keywords" content="WiFi, Hotspot, Login, Internet, Connection, Network">
+    <meta name="author" content="Silver Hotspot">
+    <meta name="theme-color" content="#4f46e5">
+    <title>Silver Hotspot - Premium WiFi</title>
+    <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Initialize animated background
+            createAnimatedBackground();
+
+            // Add input focus effects
+            const inputs = document.querySelectorAll('input');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.parentElement.classList.add('input-focused');
+                });
+                input.addEventListener('blur', function() {
+                    this.parentElement.classList.remove('input-focused');
+                });
+            });
+
+            // Create animated background
+            function createAnimatedBackground() {
+                const bgAnimation = document.createElement('div');
+                bgAnimation.className = 'bg-animation';
+
+                // Create animated elements
+                for (let i = 0; i < 7; i++) {
+                    const span = document.createElement('span');
+                    bgAnimation.appendChild(span);
+                }
+
+                document.body.appendChild(bgAnimation);
+            }
+        });
+
+        // CHAP-MD5 authentication
+        $(if chap-id)
+        function doLogin() {
+            document.sendin.username.value = document.login.username.value;
+            document.sendin.password.value = hexMD5('$(chap-id)' + document.login.password.value + '$(chap-challenge)');
+            document.sendin.submit();
+            return false;
+        }
+        $(endif)
+    </script>
+    $(if chap-id)
+    <script src="md5.js"></script>
+    $(endif)
+</head>
+
+<body>
+    <div class="login-container">
+        <div class="logo">
+            <svg width="120" height="40" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10 20C10 14.477 14.477 10 20 10H100C105.523 10 110 14.477 110 20V20C110 25.523 105.523 30 100 30H20C14.477 30 10 25.523 10 20V20Z" fill="url(#paint0_linear)"/>
+                <path d="M20 12.5L25 20L20 27.5" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                <path d="M30 15H40" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                <path d="M30 20H45" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                <path d="M30 25H40" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                <path d="M55 15H90" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                <path d="M55 20H85" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                <path d="M55 25H90" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                <path d="M95 15L100 20L95 25" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                <defs>
+                    <linearGradient id="paint0_linear" x1="10" y1="20" x2="110" y2="20" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#4F46E5"/>
+                        <stop offset="0.5" stop-color="#0EA5E9"/>
+                        <stop offset="1" stop-color="#F59E0B"/>
+                    </linearGradient>
+                </defs>
+            </svg>
+        </div>
+
+        <h1>SILVER HOTSPOT</h1>
+
+        $(if chap-id)
+        <form name="sendin" action="$(link-login-only)" method="post">
+            <input type="hidden" name="username" />
+            <input type="hidden" name="password" />
+            <input type="hidden" name="dst" value="$(link-orig)" />
+            <input type="hidden" name="popup" value="true" />
+        </form>
+        $(endif)
+
+        <form name="login" action="$(link-login-only)" method="post" $(if chap-id) onSubmit="return doLogin()" $(endif)>
+            <input type="hidden" name="dst" value="$(link-orig)" />
+            <input type="hidden" name="popup" value="true" />
+
+            <p class="info $(if error)alert$(endif)">
+                $(if error == "")
+                    <i class="fas fa-info-circle"></i> Please log in to use the premium WiFi service
+                    $(if trial == 'yes')
+                    <br /><br />
+                    <span style="display: inline-block; margin-top: 5px;">
+                        <i class="fas fa-gift" style="color: #f59e0b;"></i>
+                        Free trial available, <a href="$(link-login-only)?dst=$(link-orig-esc)&amp;username=T-$(mac-esc)">click here</a>.
+                    </span>
+                    $(endif)
+                $(endif)
+                $(if error)
+                    <i class="fas fa-exclamation-triangle"></i> $(error)
+                $(endif)
+            </p>
+
+            <label for="username">
+                <img class="ico" src="img/user.svg" alt="user" />
+                <input name="username" type="text" value="$(username)" placeholder="Username" required aria-label="Username" />
+            </label>
+
+            <label for="password">
+                <img class="ico" src="img/password.svg" alt="password" />
+                <input name="password" type="password" placeholder="Password" required aria-label="Password" />
+            </label>
+
+            <button type="submit" value="Connect">
+                <i class="fas fa-sign-in-alt"></i> Login
+            </button>
+        </form>
+
+        <footer>
+            <p>Premium WiFi Experience</p>
+            <p><span class="brand">Silver Hotspot</span> &copy; <script>document.write(new Date().getFullYear())</script> | All Rights Reserved</p>
+            <div style="margin-top: 15px;">
+                <svg width="80" height="20" viewBox="0 0 80 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 10C5 7.239 7.239 5 10 5H70C72.761 5 75 7.239 75 10V10C75 12.761 72.761 15 70 15H10C7.239 15 5 12.761 5 10V10Z" fill="url(#paint0_linear_footer)"/>
+                    <path d="M10 6.25L12.5 10L10 13.75" stroke="white" stroke-width="1" stroke-linecap="round"/>
+                    <path d="M15 7.5H20" stroke="white" stroke-width="1" stroke-linecap="round"/>
+                    <path d="M15 10H22.5" stroke="white" stroke-width="1" stroke-linecap="round"/>
+                    <path d="M15 12.5H20" stroke="white" stroke-width="1" stroke-linecap="round"/>
+                    <path d="M27.5 7.5H45" stroke="white" stroke-width="1" stroke-linecap="round"/>
+                    <path d="M27.5 10H42.5" stroke="white" stroke-width="1" stroke-linecap="round"/>
+                    <path d="M27.5 12.5H45" stroke="white" stroke-width="1" stroke-linecap="round"/>
+                    <path d="M47.5 7.5L50 10L47.5 12.5" stroke="white" stroke-width="1" stroke-linecap="round"/>
+                    <path d="M55 7.5H65" stroke="white" stroke-width="1" stroke-linecap="round"/>
+                    <path d="M55 10H62.5" stroke="white" stroke-width="1" stroke-linecap="round"/>
+                    <path d="M55 12.5H65" stroke="white" stroke-width="1" stroke-linecap="round"/>
+                    <path d="M67.5 7.5L70 10L67.5 12.5" stroke="white" stroke-width="1" stroke-linecap="round"/>
+                    <defs>
+                        <linearGradient id="paint0_linear_footer" x1="5" y1="10" x2="75" y2="10" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#4F46E5"/>
+                            <stop offset="0.5" stop-color="#0EA5E9"/>
+                            <stop offset="1" stop-color="#F59E0B"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
+        </footer>
+    </div>
+</body>
+
+</html>

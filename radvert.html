@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="refresh" content="2; url=$(link-orig)">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="expires" content="-1">
+    <title>Internet hotspot - Advertisement</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #f0f4f7;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #333;
+        }
+
+        .main {
+            background: #ffffff;
+            padding: 30px 40px;
+            border-radius: 15px;
+            width: 400px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: box-shadow 0.3s ease-in-out;
+        }
+
+        .main:hover {
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        h1 {
+            font-size: 26px;
+            margin-bottom: 20px;
+            color: #4A90E2;
+        }
+
+        .info {
+            font-size: 14px;
+            color: #888;
+        }
+
+        .info a {
+            color: #50C7D7;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .info a:hover {
+            text-decoration: underline;
+        }
+
+        .wrap {
+            margin-top: 20px;
+        }
+
+        .advert-link {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #50C7D7;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            transition: background 0.3s ease;
+        }
+
+        .advert-link:hover {
+            background: #4A90E2;
+        }
+
+        .timer {
+            font-size: 18px;
+            margin-top: 20px;
+            color: #888;
+        }
+    </style>
+    <script>
+        var popup = '';
+        function openOrig() {
+            if (window.focus) popup.focus();
+            location.href = unescape('$(link-orig-esc)');
+        }
+
+        function openAd() {
+            location.href = unescape('$(link-redirect-esc)');
+        }
+
+        function openAdvert() {
+            if (window.name != 'hotspot_advert') {
+                popup = open('$(link-redirect)', 'hotspot_advert', '');
+                setTimeout("openOrig()", 1000);
+                return;
+            }
+            setTimeout("openAd()", 1000);
+        }
+    </script>
+</head>
+
+<body onLoad="openAdvert()">
+    <div class="main">
+        <h1>Advertisement</h1>
+        <div class="wrap">
+            <p class="info">If nothing happens, open the <a href="$(link-redirect)" target="hotspot_advert">advertisement</a> manually.</p>
+            <a href="$(link-redirect)" class="advert-link" target="hotspot_advert">Open Advertisement</a>
+        </div>
+        <div class="timer">
+            <p>Redirecting in 2 seconds...</p>
+        </div>
+    </div>
+</body>
+
+</html>

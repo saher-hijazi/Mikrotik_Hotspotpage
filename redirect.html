@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting...</title>
+    <meta http-equiv="refresh" content="3; url=$(link-redirect)">
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="expires" content="-1">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #333;
+        }
+
+        .container {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 300px;
+        }
+
+        .container h1 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: #4A90E2;
+        }
+
+        .container p {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .container a {
+            text-decoration: none;
+            color: #50C7D7;
+            font-weight: bold;
+        }
+
+        .container a:hover {
+            text-decoration: underline;
+        }
+
+        .timer {
+            font-size: 18px;
+            color: #888;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Redirecting...</h1>
+        <p>Your request is being redirected to a new page.</p>
+        <p class="timer">If you are not redirected automatically, <a href="$(link-redirect)">click here</a>.</p>
+    </div>
+</body>
+
+</html>

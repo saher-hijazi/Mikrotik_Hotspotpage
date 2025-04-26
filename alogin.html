@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Premium WiFi connection portal - Silver Hotspot">
+    <meta name="keywords" content="WiFi, Hotspot, Login, Success, Internet, Connection, Network">
+    <meta name="author" content="Silver Hotspot">
+    <meta name="theme-color" content="#6366f1">
+    <title>Silver Hotspot - Connection Successful</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Initialize animated background
+            createAnimatedBackground();
+
+            // Open status window if required
+            if ('$(popup)' === 'true') {
+                window.open('$(link-status)', 'hotspot_status', 'toolbar=0,location=0,directories=0,status=0,menubar=0,resizable=1,width=290,height=200');
+            }
+
+            // Get redirect URL
+            const redirectUrl = decodeURIComponent('$(link-redirect-esc)');
+
+            // Update progress bar
+            const progressBar = document.getElementById('progress-bar');
+            const totalTime = 5; // seconds
+            let elapsed = 0;
+
+            // Update countdown timer
+            let seconds = totalTime;
+            const countdownElement = document.getElementById('countdown');
+
+            // Show connection info if available
+            const connectionInfo = {
+                ip: '$(ip)',
+                mac: '$(mac)',
+                uptime: '$(uptime)',
+                sessionTime: '$(session-time-left)',
+                bytesIn: '$(bytes-in-nice)',
+                bytesOut: '$(bytes-out-nice)',
+                username: '$(username)',
+                linkRate: '$(link-rate)',
+                signal: '$(signal)',
+                connectTime: '$(uptime)'
+            };
+
+            // Update connection info if available
+            Object.keys(connectionInfo).forEach(key => {
+                const element = document.getElementById(key);
+                if (element && connectionInfo[key] && connectionInfo[key] !== '$(' + key + ')') {
+                    element.textContent = connectionInfo[key];
+                    const row = document.getElementById(key + '-row');
+                    if (row) row.style.display = 'table-row';
+                }
+            });
+
+            // Calculate connection quality if signal is available
+            const signalValue = connectionInfo.signal;
+            if (signalValue && signalValue !== '$(signal)') {
+                const signalStrength = parseInt(signalValue);
+                let quality = 'Unknown';
+                let qualityClass = '';
+
+                if (!isNaN(signalStrength)) {
+                    if (signalStrength >= -50) {
+                        quality = 'Excellent';
+                        qualityClass = 'badge-success';
+                    } else if (signalStrength >= -60) {
+                        quality = 'Very Good';
+                        qualityClass = 'badge-success';
+                    } else if (signalStrength >= -70) {
+                        quality = 'Good';
+                        qualityClass = 'badge-primary';
+                    } else if (signalStrength >= -80) {
+                        quality = 'Fair';
+                        qualityClass = 'badge-secondary';
+                    } else {
+                        quality = 'Poor';
+                        qualityClass = 'badge-warning';
+                    }
+
+                    const qualityElement = document.getElementById('connection-quality');
+                    if (qualityElement) {
+                        qualityElement.textContent = quality;
+                        qualityElement.className = 'badge ' + qualityClass;
+                        document.getElementById('quality-row').style.display = 'table-row';
+                    }
+                }
+            }
+
+            // Update timer and progress bar
+            const updateInterval = setInterval(() => {
+                seconds--;
+                elapsed++;
+
+                // Update countdown
+                if (countdownElement) {
+                    countdownElement.textContent = seconds;
+                }
+
+                // Update progress bar
+                if (progressBar) {
+                    const percentage = (elapsed / totalTime) * 100;
+                    progressBar.style.width = percentage + '%';
+                }
+
+                // Redirect when done
+                if (seconds <= 0) {
+                    clearInterval(updateInterval);
+
+                    // Show final message before redirect
+                    document.getElementById('redirect-message').textContent = 'Redirecting now...';
+
+                    // Add success animation
+                    document.querySelector('.content').classList.add('redirect-success');
+
+                    // Redirect after a short delay
+                    setTimeout(() => {
+                        window.location.href = redirectUrl;
+                    }, 800);
+                }
+            }, 1000);
+
+            // Add event listener for manual redirect
+            document.getElementById('redirect-now').addEventListener('click', function(e) {
+                e.preventDefault();
+                clearInterval(updateInterval);
+                window.location.href = redirectUrl;
+            });
+
+            // Toggle connection details visibility
+            document.getElementById('toggle-details').addEventListener('click', function(e) {
+                e.preventDefault();
+                const details = document.getElementById('connection-details');
+                details.classList.toggle('active');
+
+                const isVisible = details.classList.contains('active');
+                this.innerHTML = isVisible ?
+                    '<i class="fas fa-times-circle"></i> Hide connection details' :
+                    '<i class="fas fa-info-circle"></i> Show connection details';
+            });
+
+            // Create animated background
+            function createAnimatedBackground() {
+                const bgAnimation = document.createElement('div');
+                bgAnimation.className = 'bg-animation';
+
+                // Create animated elements
+                for (let i = 0; i < 7; i++) {
+                    const span = document.createElement('span');
+                    bgAnimation.appendChild(span);
+                }
+
+                document.body.appendChild(bgAnimation);
+            }
+
+            // Add current date and time
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
+
+            function updateDateTime() {
+                const now = new Date();
+                const options = {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                };
+                document.getElementById('current-datetime').textContent = now.toLocaleDateString('en-US', options);
+            }
+        });
+    </script>
+    <style>
+        /* Additional animations */
+        @keyframes success-pulse {
+            0% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4); }
+            70% { box-shadow: 0 0 0 20px rgba(99, 102, 241, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
+        }
+
+        .redirect-success {
+            animation: success-pulse 1.5s ease-out;
+        }
+
+        /* Print styles */
+        @media print {
+            .no-print { display: none !important; }
+            .content { box-shadow: none; border: 1px solid #ddd; }
+            body { background: white; }
+            .connection-details { display: block !important; max-height: none !important; opacity: 1 !important; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main-container">
+        <div class="content">
+            <div class="logo" style="margin-bottom: 20px;">
+                <svg width="120" height="40" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10 20C10 14.477 14.477 10 20 10H100C105.523 10 110 14.477 110 20V20C110 25.523 105.523 30 100 30H20C14.477 30 10 25.523 10 20V20Z" fill="url(#paint0_linear)"/>
+                    <path d="M20 12.5L25 20L20 27.5" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M30 15H40" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M30 20H45" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M30 25H40" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M55 15H90" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M55 20H85" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M55 25H90" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M95 15L100 20L95 25" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                    <defs>
+                        <linearGradient id="paint0_linear" x1="10" y1="20" x2="110" y2="20" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#4F46E5"/>
+                            <stop offset="0.5" stop-color="#0EA5E9"/>
+                            <stop offset="1" stop-color="#F59E0B"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
+
+            <div class="success-icon">
+                <i class="fas fa-wifi"></i>
+            </div>
+
+            <h1>Connection Successful</h1>
+
+            <div class="glass-section">
+                <span class="badge badge-success"><i class="fas fa-shield-alt"></i> Secure Connection</span>
+                <span class="badge badge-primary"><i class="fas fa-check-circle"></i> Authenticated</span>
+                <span class="badge badge-warning"><i class="fas fa-bolt"></i> High Speed</span>
+                <p id="current-datetime" style="margin-top: 10px; font-size: 0.9rem;"></p>
+            </div>
+
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+
+            <p class="info">You will be redirected in <span id="countdown" class="countdown">5</span> seconds</p>
+            <p id="redirect-message">Preparing your browsing experience...</p>
+
+            <div class="spinner no-print"></div>
+
+            <div class="btn-container" style="margin: 20px 0;">
+                <a href="$(link-redirect)" id="redirect-now" class="btn btn-primary no-print">
+                    <i class="fas fa-external-link-alt"></i> Continue Now
+                </a>
+
+                <a href="#" id="toggle-details" class="btn btn-outline no-print">
+                    <i class="fas fa-info-circle"></i> Show Connection Details
+                </a>
+
+                <a href="javascript:window.print()" class="btn btn-outline no-print" style="margin-left: 10px;">
+                    <i class="fas fa-print"></i> Print
+                </a>
+            </div>
+
+            <div id="connection-details" class="connection-details">
+                <h2 style="font-size: 1.3rem; margin-bottom: 15px;">Connection Information</h2>
+
+                <table class="details-table">
+                    <tr id="username-row" style="display: none;">
+                        <td><i class="fas fa-user"></i> Username</td>
+                        <td id="username">-</td>
+                    </tr>
+                    <tr id="ip-row" style="display: none;">
+                        <td><i class="fas fa-network-wired"></i> IP Address</td>
+                        <td id="ip">-</td>
+                    </tr>
+                    <tr id="mac-row" style="display: none;">
+                        <td><i class="fas fa-fingerprint"></i> MAC Address</td>
+                        <td id="mac">-</td>
+                    </tr>
+                    <tr id="linkRate-row" style="display: none;">
+                        <td><i class="fas fa-tachometer-alt"></i> Link Speed</td>
+                        <td id="linkRate">-</td>
+                    </tr>
+                    <tr id="signal-row" style="display: none;">
+                        <td><i class="fas fa-signal"></i> Signal Strength</td>
+                        <td id="signal">-</td>
+                    </tr>
+                    <tr id="quality-row" style="display: none;">
+                        <td><i class="fas fa-star"></i> Connection Quality</td>
+                        <td><span id="connection-quality" class="badge">-</span></td>
+                    </tr>
+                    <tr id="uptime-row" style="display: none;">
+                        <td><i class="fas fa-clock"></i> Connected Time</td>
+                        <td id="uptime">-</td>
+                    </tr>
+                    <tr id="sessionTime-row" style="display: none;">
+                        <td><i class="fas fa-hourglass-half"></i> Session Time Left</td>
+                        <td id="sessionTime">-</td>
+                    </tr>
+                    <tr id="bytesIn-row" style="display: none;">
+                        <td><i class="fas fa-download"></i> Data Downloaded</td>
+                        <td id="bytesIn">-</td>
+                    </tr>
+                    <tr id="bytesOut-row" style="display: none;">
+                        <td><i class="fas fa-upload"></i> Data Uploaded</td>
+                        <td id="bytesOut">-</td>
+                    </tr>
+                    <tr id="connectTime-row" style="display: none;">
+                        <td><i class="fas fa-plug"></i> Connection Time</td>
+                        <td id="connectTime">-</td>
+                    </tr>
+                </table>
+
+                <div style="margin-top: 15px; font-size: 0.85rem; color: var(--muted-text);">
+                    <p><i class="fas fa-info-circle"></i> This information is for reference only and may be useful for troubleshooting.</p>
+                </div>
+            </div>
+
+            <div class="footer">
+                <p>Thank you for using our premium WiFi service</p>
+                <p><span class="brand">Silver Hotspot</span> &copy; <script>document.write(new Date().getFullYear())</script> | All Rights Reserved</p>
+                <p style="font-size: 0.8rem; margin-top: 10px;">
+                    <a href="#" class="link-underline" onclick="alert('Terms of Service would open here'); return false;">Terms of Service</a> |
+                    <a href="#" class="link-underline" onclick="alert('Privacy Policy would open here'); return false;">Privacy Policy</a> |
+                    <a href="#" class="link-underline" onclick="alert('Help Center would open here'); return false;">Help</a>
+                </p>
+                <div style="margin-top: 15px;">
+                    <svg width="80" height="20" viewBox="0 0 80 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5 10C5 7.239 7.239 5 10 5H70C72.761 5 75 7.239 75 10V10C75 12.761 72.761 15 70 15H10C7.239 15 5 12.761 5 10V10Z" fill="url(#paint0_linear_footer)"/>
+                        <path d="M10 6.25L12.5 10L10 13.75" stroke="white" stroke-width="1" stroke-linecap="round"/>
+                        <path d="M15 7.5H20" stroke="white" stroke-width="1" stroke-linecap="round"/>
+                        <path d="M15 10H22.5" stroke="white" stroke-width="1" stroke-linecap="round"/>
+                        <path d="M15 12.5H20" stroke="white" stroke-width="1" stroke-linecap="round"/>
+                        <path d="M27.5 7.5H45" stroke="white" stroke-width="1" stroke-linecap="round"/>
+                        <path d="M27.5 10H42.5" stroke="white" stroke-width="1" stroke-linecap="round"/>
+                        <path d="M27.5 12.5H45" stroke="white" stroke-width="1" stroke-linecap="round"/>
+                        <path d="M47.5 7.5L50 10L47.5 12.5" stroke="white" stroke-width="1" stroke-linecap="round"/>
+                        <path d="M55 7.5H65" stroke="white" stroke-width="1" stroke-linecap="round"/>
+                        <path d="M55 10H62.5" stroke="white" stroke-width="1" stroke-linecap="round"/>
+                        <path d="M55 12.5H65" stroke="white" stroke-width="1" stroke-linecap="round"/>
+                        <path d="M67.5 7.5L70 10L67.5 12.5" stroke="white" stroke-width="1" stroke-linecap="round"/>
+                        <defs>
+                            <linearGradient id="paint0_linear_footer" x1="5" y1="10" x2="75" y2="10" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#4F46E5"/>
+                                <stop offset="0.5" stop-color="#0EA5E9"/>
+                                <stop offset="1" stop-color="#F59E0B"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
